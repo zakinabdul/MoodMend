@@ -43,34 +43,36 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <header className="text-center mb-12">
-        <h1 className="text-4xl md:text-6xl font-serif text-eco-moss mb-2 tracking-tight">MoodMend</h1>
-        <p className="text-eco-dark/60 italic">Your voice, your journey.</p>
-      </header>
+    <div className="min-h-screen flex flex-col bg-eco-sand/30">
+      <div className="container mx-auto px-4 py-8 max-w-4xl flex-grow flex flex-col">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl md:text-6xl font-serif text-eco-moss mb-2 tracking-tight">MoodMend</h1>
+          <p className="text-eco-dark/60 italic">Your voice, your journey.</p>
+        </header>
 
-      <main className="space-y-12">
-        <section className="flex justify-center">
-          <VoiceRecorder onRecordComplete={handleRecordComplete} />
-        </section>
+        <main className="space-y-12 flex-grow">
+          <section className="flex justify-center">
+            <VoiceRecorder onRecordComplete={handleRecordComplete} />
+          </section>
 
-        {loading && (
-          <div className="text-center text-eco-terra animate-pulse">Analyzing your mood...</div>
-        )}
+          {loading && (
+            <div className="text-center text-eco-terra animate-pulse">Analyzing your mood...</div>
+          )}
 
-        <section>
-          <MoodChart data={entries} />
-        </section>
+          <section>
+            <MoodChart data={entries} />
+          </section>
 
-        <section>
-          <h2 className="text-2xl font-serif text-eco-moss mb-6 px-2">Recent Entries</h2>
-          <JournalFeed entries={entries} />
-        </section>
-      </main>
+          <section>
+            <h2 className="text-2xl font-serif text-eco-moss mb-6 px-2">Recent Entries</h2>
+            <JournalFeed entries={entries} />
+          </section>
+        </main>
 
-      <footer className="mt-20 text-center text-eco-moss/40 text-sm">
-        <p>&copy; {new Date().getFullYear()} MoodMend. Heal through expression.</p>
-      </footer>
+        <footer className="mt-20 text-center text-eco-moss/40 text-sm py-6">
+          <p>&copy; {new Date().getFullYear()} MoodMend. Heal through expression.</p>
+        </footer>
+      </div>
     </div>
   );
 }
