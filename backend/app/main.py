@@ -5,6 +5,18 @@ from typing import List
 
 from .models import MoodEntry, MoodResponse
 from .sentiment import analyze_sentiment_text
+import nltk
+import os
+
+# Ensure NLTK data is downloaded (fixes MissingCorpusError on Render)
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    print("Downloading NLTK punkt data...")
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
+    nltk.download('brown') # TextBlob often uses this too
+
 
 app = FastAPI(title="MoodMend API", description="Backend for MoodMend Voice Journal")
 
