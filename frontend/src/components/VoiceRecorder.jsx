@@ -15,15 +15,24 @@ const VoiceRecorder = ({ onRecordComplete }) => {
             recognitionInstance.interimResults = true;
 
             recognitionInstance.onresult = (event) => {
-                let currentTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                let finalTranscript = '';
+                let interimTranscript = '';
+
+                // Iterate through all results to reconstruct the full transcript
+                for (let i = 0; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        currentTranscript += event.results[i][0].transcript;
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
                     }
                 }
-                if (currentTranscript) {
-                    setTranscript(prev => prev + ' ' + currentTranscript);
-                }
+
+                // Update state with the reconstructed transcript
+                // We use a functional state update to ensure we don't lose previous segments if checking continuously, 
+                // BUT since we iterate from 0 every time in 'continuous' mode, we usually get the *whole* session.
+                // However, standard Web Speech API behavior with continuous=true returns the *accumulated* results list.
+                // So we can just set it directly.
+                setTranscript(finalTranscript + interimTranscript);
             };
 
             recognitionInstance.onerror = (event) => {
