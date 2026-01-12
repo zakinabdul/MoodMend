@@ -43,7 +43,7 @@ async def root():
 async def analyze_entry(
     entry_create: MoodEntryCreate, 
     user: User = Depends(get_current_user), 
-    session: Session = Depends(get_session)
+    session = Depends(get_session)
 ):
     if not entry_create.text:
         raise HTTPException(status_code=400, detail="Text is required")
@@ -68,7 +68,7 @@ async def analyze_entry(
 @app.get("/api/history", response_model=List[MoodResponse])
 async def get_history(
     user: User = Depends(get_current_user), 
-    session: Session = Depends(get_session)
+    session = Depends(get_session)
 ):
     # Return sorted by timestamp desc for the current user
     statement = select(MoodEntry).where(MoodEntry.user_id == user.id).order_by(MoodEntry.timestamp.desc())
