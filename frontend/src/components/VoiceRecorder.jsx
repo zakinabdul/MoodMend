@@ -41,6 +41,12 @@ const VoiceRecorder = ({ onRecordComplete }) => {
             };
 
             setRecognition(recognitionInstance);
+
+            return () => {
+                recognitionInstance.abort();
+                recognitionInstance.onresult = null;
+                recognitionInstance.onerror = null;
+            };
         }
     }, []);
 
