@@ -31,8 +31,12 @@ function App() {
   const fetchHistory = async () => {
     if (!user) return;
     try {
-      // TODO: Add Authorization header once backend supports it
-      const res = await axios.get(`${API_URL}/history`);
+      const token = await user.getIdToken();
+      const res = await axios.get(`${API_URL}/history`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setEntries(res.data);
     } catch (err) {
       console.error("Failed to fetch history", err);
@@ -48,10 +52,13 @@ function App() {
   const handleRecordComplete = async (transcript) => {
     setLoading(true);
     try {
-      // TODO: Add Authorization header once backend supports it
+      const token = await user.getIdToken();
       const res = await axios.post(`${API_URL}/analyze`, {
         text: transcript,
-        // timestamp: new Date().toISOString() // Let backend handle or send now
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       // Refresh history or append
       setEntries(prev => [res.data, ...prev]);
