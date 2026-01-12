@@ -3,13 +3,28 @@ from firebase_admin import auth, credentials
 from fastapi import HTTPException, Security, Request, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
+import json
 from .models import User
 from .db import get_session
 from sqlmodel import Session, select
 
 # Initialize Firebase Admin
 if not firebase_admin._apps:
-    firebase_admin.initialize_app()
+    service_account_json = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
+    if service_account_json:
+        # Parse the JSON string from environment variable
+        try:
+            cred_dict = json.loads(service_account_json)
+            cred = credentials.Certificate(cred_dict)
+            firebase_admin.initialize_app(cred)
+            print("Firebase initialized with Service Account.")
+        except json.JSONDecodeError as e:
+            print(f"Error parsing FIREBASE_SERVICE_ACCOUNT_JSON: {e}")
+            firebase_admin.initialize_app()
+    else:
+        # Fallback to default credentials (works on GCP, or for public key fetch only)
+        print("Firebase initialized with Default Credentials.")
+        firebase_admin.initialize_app()
 
 security = HTTPBearer()
 
