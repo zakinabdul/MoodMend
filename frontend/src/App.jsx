@@ -84,12 +84,32 @@ function App() {
         <header className="text-center mb-12 relative">
           <h1 className="text-4xl md:text-6xl font-serif text-eco-moss mb-2 tracking-tight">MoodMend</h1>
           <p className="text-eco-dark/60 italic">Your voice, your journey.</p>
-          <button
-            onClick={() => auth.signOut()}
-            className="absolute right-0 top-0 text-xs text-eco-moss/50 hover:text-eco-moss border border-eco-moss/20 px-3 py-1 rounded-full transition-colors"
-          >
-            Sign Out
-          </button>
+          <div className="absolute right-0 top-0 flex items-center space-x-4">
+            {user && (
+              <div className="relative group">
+                <button className="flex items-center focus:outline-none">
+                  <img
+                    src={user.photoURL || "https://ui-avatars.com/api/?name=" + user.email}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full border-2 border-eco-moss/30 shadow-sm hover:border-eco-moss transition-all"
+                  />
+                </button>
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white/80 backdrop-blur-md rounded-xl shadow-lg py-2 border border-white/50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-xs text-gray-500">Signed in as</p>
+                    <p className="text-sm font-semibold text-eco-moss truncate">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={() => auth.signOut()}
+                    className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </header>
 
         <main className="space-y-12 flex-grow">
